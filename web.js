@@ -3,9 +3,9 @@ var express = require('express');
 var app = express.createServer(express.logger());
 
 app.get('/', function(request, response) {
-var fs = require(fs);
-var buf = new Buffer (256);
-response.send(buf.toString('utc 8', fs.readFileSync("index.html")));
+var fs = require('fs');
+var buf = new Buffer (fs.readFileSync('index.html'), utf-8);
+response.send(buf.toString());
 
 // response.send('Hello World2!');
 });
