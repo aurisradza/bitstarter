@@ -47,7 +47,7 @@ var loadChecks = function(checksfile) {
 };
 
 var checkHtmlFile = function(htmlfile, checksfile) {
-    $ = cheerioHtmlFile(htmlfile);
+    $ = htmlfile
     var checks = loadChecks(checksfile).sort();
     var out = {};
     for(var ii in checks) {
@@ -56,18 +56,6 @@ var checkHtmlFile = function(htmlfile, checksfile) {
     }
     return out;
 };
-
-var checkUrl = function(htmlfile, checksfile) {
-    $ = htmlfile;
-    var checks = loadChecks(checksfile).sort();
-    var out = {};
-    for(var ii in checks) {
-        var present = $(checks[ii]).length > 0;
-        out[checks[ii]] = present;
-    }
-    return out;
-};
-
 
 var clone = function(fn) {
     // Workaround for commander.js issue.
@@ -88,14 +76,14 @@ if(require.main == module) {
                 sys.puts('Error: ' + result.message);
                 this.retry(5000); // try again after 5 sec
             } else {
-                var checkJson = checkUrl(cheerio.load(result), program.checks); 
+                var checkJson = checkHtmlFile(cheerio.load(result), program.checks); 
                 var outJson = JSON.stringify(checkJson, null, 4);
                 console.log(outJson);
             }
         });
     } else {
 
-        var checkJson = checkHtmlFile(program.file, program.checks);
+        var checkJson = checkHtmlFile(cheerioHtmlFile(program.file), program.checks);
         var outJson = JSON.stringify(checkJson, null, 4);
         console.log(outJson);
     }
